@@ -1,25 +1,29 @@
 package com.model;
 
-import java.net.URL;
+
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity
+@Entity()
+@Table(name = "user")
 public class User {
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	private String email;
 	private String password;
-	private  URL   imageurl;
-	public User(String email, String password, URL imageurl) {
+	private String  imageUrl;
+	
+	public User(String email, String password, String imageurl) {
 		super();
 		this.email = email;
 		this.password = password;
-		this.imageurl = imageurl;
+		this.imageUrl = imageurl;
 	}
 	public String getEmail() {
 		return email;
@@ -33,11 +37,21 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public URL getImageurl() {
-		return imageurl;
+	public String getImageurl() {
+		return imageUrl;
 	}
-	public void setImageurl(URL imageurl) {
-		this.imageurl = imageurl;
+	public void setImageurl(String imageurl) {
+		this.imageUrl = imageurl;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public User() {
+		super();
+		
 	}
 	
 

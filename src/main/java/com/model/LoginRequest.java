@@ -1,17 +1,12 @@
 package com.model;
 
-public class Login {
+import org.springframework.web.multipart.MultipartFile;
+
+public class LoginRequest {
 	private String email;
 	private String password;
-	public Login() {
-		super();
-		
-	}
-	public Login(String username, String password) {
-		super();
-		this.email = email;
-		this.password = password;
-	}
+	
+	
 	public String getEmail() {
 		return email;
 	}
@@ -24,10 +19,9 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	@Override
-	public String toString() {
-		return "Login [email=" + email + ", password=" + password + "]";
-	}
+	
+	
+	
 	
 
 }

@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name ="dishes")
+//@Entity
+//@Table(name ="dishes")
 public class Dishes {
 	@Id
 	private String restaurantname;
