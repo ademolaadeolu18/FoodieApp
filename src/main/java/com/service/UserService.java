@@ -1,48 +1,33 @@
 package com.service;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 
+import com.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
-import com.config.UploadImageService;
-
-import com.model.LoginRequest;
-import com.model.LoginResponse;
-import com.model.User;
-import com.model.UserRequest;
 import com.repository.UserRepository;
 
 @Service
 public class UserService {
 
-	private UserRepository repo;
+	private UserRepository userRepository;
 	
-	@Autowired(required = false)
-	private BCryptPasswordEncoder passwordEncoder;
-//	@Autowired
+	@Autowired()
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	UploadImageService uploadImageService;
 
-	public UserService(UserRepository repo, UploadImageService uploadImageService) {
-		this.repo = repo;
+	public UserService(UserRepository userRepository, UploadImageService uploadImageService) {
+		this.userRepository = userRepository;
 		this.uploadImageService = uploadImageService;
 
 	}
 
 	public boolean isExist(String email) {
-		Optional<User> op = repo.findByEmail(email);
+		Optional<User> op = userRepository.findByEmail(email);
 		if (op.isPresent()) {
 			return true;
 		}
@@ -50,7 +35,7 @@ public class UserService {
 	}
 	
 	public Optional<User> findUserByEmail(String email){
-		return repo.findByEmail(email);
+		return userRepository.findByEmail(email);
 	}
 
 	public String registerUser(UserRequest request) {
@@ -58,7 +43,7 @@ public class UserService {
 		if (isExist(user.getEmail())) {
 			return "user already exists";
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
 		try {
 			if (request.getFile() != null) {
@@ -66,20 +51,19 @@ public class UserService {
 				user.setImageurl(url);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "not successful";
 		}
-		repo.save(user);
+		userRepository.save(user);
 		return "added successfully";
 	}
 
-	public LoginResponse userValidation(LoginRequest login) {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Optional<User> user = repo.findByEmail(login.getEmail());
-		if (passwordEncoder.matches(login.getPassword(), user.get().getPassword())) {
-			return new LoginResponse(user.get().getEmail(), user.get().getImageurl(), "Login Successful");
+	public UserInfo getUserInfo(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if(user.isPresent()){
+			return new UserInfo(user.get().getEmail(), user.get().getImageurl());
+		} else {
+			return new UserInfo("","");
 		}
-		return new LoginResponse("", "", "Login Failed");
 	}
 }

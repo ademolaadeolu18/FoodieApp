@@ -1,4 +1,4 @@
-package com.config;
+package com.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
@@ -38,7 +38,8 @@ public class UploadImageService {
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentType(file.getContentType());
 			s3Client.putObject(request);
-			return s3Client.getUrl(bucketName, fileName).getPath();
+
+			return s3Client.getUrl(bucketName, fileName).toExternalForm();
 		} catch (SdkClientException e) {
 
 			e.printStackTrace();

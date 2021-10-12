@@ -1,19 +1,15 @@
 package com.controller;
 
+import com.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.model.LoginRequest;
-import com.model.LoginResponse;
-import com.model.User;
 import com.model.UserRequest;
 import com.service.UserService;
+
+import java.security.Principal;
 
 @RestController
 public class UserController {
@@ -29,9 +25,9 @@ public class UserController {
 
 	}
 
-	@PostMapping(value ="/login")
-	public LoginResponse login(@RequestBody LoginRequest login) {
-		return service.userValidation(login);
+	@GetMapping(value ="/userInfo")
+	public UserInfo login(Principal principal) {
+		return service.getUserInfo(principal.getName());
 	}
 
 }

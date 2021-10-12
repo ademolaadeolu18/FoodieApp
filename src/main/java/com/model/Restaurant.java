@@ -1,40 +1,27 @@
 package com.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "restaurant")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Restaurant {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
-//	private String type;
-//	private String city;
-//	private Dishes dish;
-//	private String contactdetails;
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-	public Restaurant(String name) {
-		super();
-		this.name = name;
-	}
+	private String city;
 
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "favorite_id")
+	private Favorite favorite;
 }

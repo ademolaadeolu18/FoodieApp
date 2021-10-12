@@ -1,17 +1,15 @@
 package com.controller;
 
-import java.util.List;
-
+import com.model.*;
+import com.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.model.Favorite;
-import com.model.FavoriteRequest;
-import com.service.FavoriteService;
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class FavoriteController {
@@ -20,14 +18,16 @@ public class FavoriteController {
 	
 	
 	@PostMapping("/favorites") 
-	public String addFavorite(@RequestBody FavoriteRequest request) {
-		return service.addFavorite(request);
+	public String addFavorite(@RequestBody FavoriteRequest favoriteRequest, Principal principal) {
+		return service.addFavorite(favoriteRequest.getRestaurants(), principal.getName());
 	}
 	
-	@GetMapping("/favorites/{userEmail}")
-	public List<Favorite> getUserFavorites(@PathVariable String userEmail){
-		return service.getUserFavorites(userEmail);
+	@GetMapping("/favorites")
+	public List<RestaurantDto>  getUserFavorites(Principal principal){
+		return service.getUserFavorites(principal.getName());
 	}
+
+
 
 
 }
